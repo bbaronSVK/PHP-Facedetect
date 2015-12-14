@@ -81,6 +81,9 @@ static void php_facedetect(INTERNAL_FUNCTION_PARAMETERS, int return_type)
 {
 	char *file, *casc;
 	long flen, clen;
+	long minsize = 30;
+	long maxsize = 300;
+	double scale = 1.2;
 
 	zval *array;
 
@@ -90,7 +93,7 @@ static void php_facedetect(INTERNAL_FUNCTION_PARAMETERS, int return_type)
 	CvSeq *faces;
 	CvRect *rect;
 
-	if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss", &file, &flen, &casc, &clen) == FAILURE) {
+	if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss|dll", &file, &flen, &casc, &clen, &scale, &minsize, &maxsize) == FAILURE) {
 		RETURN_NULL();
 	}
 
@@ -110,7 +113,8 @@ static void php_facedetect(INTERNAL_FUNCTION_PARAMETERS, int return_type)
 
 	storage = cvCreateMemStorage(0);
 
-	faces = cvHaarDetectObjects(gray, cascade, storage, 1.1, 2, CV_HAAR_DO_CANNY_PRUNING, cvSize(0, 0), cvSize(0, 0));
+	//php_printf("MSIZE: [%f %d %d]\n", scale, minsize, maxsize);
+	faces = cvHaarDetectObjects(gray, cascade, storage, scale, 3, CV_HAAR_DO_CANNY_PRUNING, cvSize(minsize, minsize), cvSize(maxsize, maxsize));
 
 	if(return_type) {
 
