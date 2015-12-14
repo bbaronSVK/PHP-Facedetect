@@ -21,12 +21,8 @@
 #include "ext/standard/info.h"
 #include "php_facedetect.h"
 
-#include "opencv2/core/core_c.h"
-#include "opencv2/imgproc/imgproc_c.h"
-#include "opencv2/photo/photo_c.h"
-#include "opencv2/objdetect/objdetect_c.h"
-
-#include "opencv2/core/version.hpp"
+#include <opencv/cv.h>
+#include <opencv/highgui.h>
 
 /* {{{ facedetect_functions[]
  *
@@ -74,8 +70,6 @@ PHP_MINFO_FUNCTION(facedetect)
 	php_info_print_table_end();
 }
 /* }}} */
-
-IplImage* cvLoadImage(char *file, int number);
 
 static void php_facedetect(INTERNAL_FUNCTION_PARAMETERS, int return_type)
 {
